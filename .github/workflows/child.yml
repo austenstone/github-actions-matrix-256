@@ -1,0 +1,32 @@
+on:
+  workflow_call:
+    inputs:
+      batch:
+        description: 'Batch identifier'
+        required: false
+        type: string
+
+jobs:
+  child:
+    strategy:
+      matrix:
+        # 2^8 = 256 combinations using 8 binary dimensions
+        bit0: [0, 1]  # 2^0
+        bit1: [0, 1]  # 2^1  
+        bit2: [0, 1]  # 2^2
+        bit3: [0, 1]  # 2^3
+        bit4: [0, 1]  # 2^4
+        bit5: [0, 1]  # 2^5
+        bit6: [0, 1]  # 2^6
+        bit7: [0, 1]  # 2^7
+    runs-on: ubuntu-latest
+    steps:
+      - name: Matrix job
+        run: |
+          # Calculate the decimal index from binary bits
+          INDEX=$((${{ matrix.bit0 }} + ${{ matrix.bit1 }}*2 + ${{ matrix.bit2 }}*4 + ${{ matrix.bit3 }}*8 + ${{ matrix.bit4 }}*16 + ${{ matrix.bit5 }}*32 + ${{ matrix.bit6 }}*64 + ${{ matrix.bit7 }}*128))
+          BINARY="${{ matrix.bit7 }}${{ matrix.bit6 }}${{ matrix.bit5 }}${{ matrix.bit4 }}${{ matrix.bit3 }}${{ matrix.bit2 }}${{ matrix.bit1 }}${{ matrix.bit0 }}"
+          
+          echo "🔥 Running matrix job #${INDEX} (binary: ${BINARY}) from batch ${{ inputs.batch || 'unknown' }}"
+          echo "📊 Bits: 7:${{ matrix.bit7 }} 6:${{ matrix.bit6 }} 5:${{ matrix.bit5 }} 4:${{ matrix.bit4 }} 3:${{ matrix.bit3 }} 2:${{ matrix.bit2 }} 1:${{ matrix.bit1 }} 0:${{ matrix.bit0 }}"
+          echo "🎯 This is job ${INDEX} out of 256 in the child workflow"
