@@ -1,12 +1,28 @@
 on:
   workflow_dispatch:
+    inputs:
+      num_batches:
+        description: 'Number of batches to create'
+        required: true
+        default: '2'
+        type: string
 
 jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      batches: ${{ steps.generate.outputs.batches }}
+    steps:
+      - name: Generate batch matrix
+        id: generate
+        run: |
+          echo "batches=[$(seq -s, 1 ${{ github.event.inputs.num_batches }})]" >> $GITHUB_OUTPUT
+
   caller:
+    needs: generate-matrix
     strategy:
       matrix:
-        # 2 batches * 256 jobs each = 512 total jobs
-        batch: [1, 2]
+        batch: ${{ fromJSON(needs.generate-matrix.outputs.batches) }}
     uses: ./.github/workflows/child.yml
     with:
       batch: ${{ matrix.batch }}
