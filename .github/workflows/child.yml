@@ -30,10 +30,10 @@ jobs:
           echo "🔥 Running matrix job #${INDEX} (binary: ${BINARY}) from batch ${{ inputs.batch || 'unknown' }}"
           echo "📊 Bits: 7:${{ matrix.bit7 }} 6:${{ matrix.bit6 }} 5:${{ matrix.bit5 }} 4:${{ matrix.bit4 }} 3:${{ matrix.bit3 }} 2:${{ matrix.bit2 }} 1:${{ matrix.bit1 }} 0:${{ matrix.bit0 }}"
           echo "🎯 This is job ${INDEX} out of 256 in the child workflow"
-          
+
       - run: mkdir -p path/to/artifact
       - run: echo hello > path/to/artifact/world.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: my-artifact
+          name: my-artifact-${{ matrix.bit7 }}${{ matrix.bit6 }}${{ matrix.bit5 }}${{ matrix.bit4 }}${{ matrix.bit3 }}${{ matrix.bit2 }}${{ matrix.bit1 }}${{ matrix.bit0 }}
           path: path/to/artifact/world.txt
