@@ -35,5 +35,5 @@ jobs:
       - run: echo hello > path/to/artifact/world.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: my-artifact-${{ matrix.bit7 }}${{ matrix.bit6 }}${{ matrix.bit5 }}${{ matrix.bit4 }}${{ matrix.bit3 }}${{ matrix.bit2 }}${{ matrix.bit1 }}${{ matrix.bit0 }}
+          name: my-artifact-batch${{ inputs.batch }}-${{ matrix.bit7 }}${{ matrix.bit6 }}${{ matrix.bit5 }}${{ matrix.bit4 }}${{ matrix.bit3 }}${{ matrix.bit2 }}${{ matrix.bit1 }}${{ matrix.bit0 }}
           path: path/to/artifact/world.txt
